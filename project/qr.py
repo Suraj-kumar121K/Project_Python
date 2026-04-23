@@ -48,12 +48,12 @@ except:
 draw.rectangle([(20, 20), (W-20, H-20)], outline=(0, 255, 150), width=3)
 
 # TITLE
-draw.text((40, 40), "GITHUB PROFILE CARD", fill=(0, 255, 150), font=title_font)
+draw.text((40, 40), "Data Analyst", fill=(0, 255, 150), font=title_font)
 
 # DETAILS
 draw.text((40, 120), "Name: Suraj Kumar", fill="white", font=text_font)
-draw.text((40, 160), "GitHub: Suraj-kumar121K", fill=(0, 200, 255), font=text_font)
-draw.text((40, 200), "Status: Data Analyst | Python Learner", fill="white", font=text_font)
+draw.text((40, 160), "Visulazation: Excel | SQL | PowerBi", fill=(0, 200, 255), font=text_font)
+draw.text((40, 200), "CODE: Python Learner(Numpy | Pandas | Matplotlib)", fill=(0,300,255), font=text_font)
 
 # QR BORDER BOX
 qr_img = qr_img.resize((260, 260))
