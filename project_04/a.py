@@ -6,7 +6,7 @@ from PIL import Image, ImageTk
 # ---------------- WINDOW ----------------
 clk = tk.Tk()
 clk.title("QR + Clock System")
-clk.geometry("900x600+200+50")
+clk.geometry("900x700+200+50")
 clk.config(bg="#0C1E28")
 
 # ---------------- LINKS ----------------
@@ -38,6 +38,25 @@ skills = tk.Label(clk,
                   bg="#0C1E28", fg="#00BFFF")
 skills.pack(pady=10)
 
+# ---------------- ADF (Resume Info) ----------------
+adf_label = tk.Label(clk,
+                     text="Email: kumarsuraj2031@gmail.com | Phone: +91 7667795227",
+                     font=("Times", 12),
+                     bg="#0C1E28", fg="lightgray")
+adf_label.pack(pady=5)
+
+# ---------------- CLOCK ----------------
+clock_label = tk.Label(clk, font=("Times", 18, "bold"),
+                       bg="#0C1E28", fg="cyan")
+clock_label.pack()
+
+def update_clock():
+    current_time = time.strftime("%H:%M:%S")
+    clock_label.config(text=f"Current Time: {current_time}")
+    clk.after(1000, update_clock)
+
+update_clock()
+
 # ---------------- QR ----------------
 qr_label = tk.Label(clk, bg="#0C1E28")
 qr_label.pack(pady=20)
@@ -56,6 +75,14 @@ footer = tk.Label(clk,
                   bg="#0C1E28", fg="gray")
 footer.pack(pady=10)
 
+# ---------------- HISTORY BOX ----------------
+history_box = tk.Listbox(clk, width=70, height=6,
+                         bg="#0C1E28", fg="white")
+history_box.pack(pady=10)
+
+def add_history(link):
+    history_box.insert(tk.END, f"QR Shown: {link}")
+
 # ---------------- FUNCTION ----------------
 def generate_qr(data):
     qr = qrcode.make(data)
@@ -63,6 +90,7 @@ def generate_qr(data):
     qr_img = ImageTk.PhotoImage(qr)
     qr_label.config(image=qr_img)
     qr_label.image = qr_img
+    add_history(data)
 
 def update():
     global last_qr_min, link_index
@@ -88,9 +116,29 @@ def update():
 exit_btn = tk.Button(clk, text="Exit", command=clk.destroy,
                      font=("Times", 14, "bold"),
                      bg="red", fg="white")
-exit_btn.pack(pady=20)
+exit_btn.pack(pady=10)
+
+# Hover effect for Exit
+def on_enter_exit(e): exit_btn.config(bg="darkred", fg="yellow")
+def on_leave_exit(e): exit_btn.config(bg="red", fg="white")
+exit_btn.bind("<Enter>", on_enter_exit)
+exit_btn.bind("<Leave>", on_leave_exit)
+
+# ---------------- REFRESH BUTTON ----------------
+refresh_btn = tk.Button(clk, text="Refresh QR",
+                        font=("Times", 14, "bold"),
+                        bg="blue", fg="white",
+                        command=lambda: generate_qr(links[link_index]))
+refresh_btn.pack(pady=10)
+
+# Hover effect for Refresh
+def on_enter_refresh(e): refresh_btn.config(bg="darkblue", fg="yellow")
+def on_leave_refresh(e): refresh_btn.config(bg="blue", fg="white")
+refresh_btn.bind("<Enter>", on_enter_refresh)
+refresh_btn.bind("<Leave>", on_leave_refresh)
 
 # ---------------- START ----------------
 generate_qr(links[0])   # 👈 Initial QR show hoga
 update()
 clk.mainloop()
+
