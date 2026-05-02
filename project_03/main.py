@@ -94,3 +94,4 @@ exit_btn.pack(pady=20)
 generate_qr(links[0])   # 👈 Initial QR show hoga
 update()
 clk.mainloop()
+
