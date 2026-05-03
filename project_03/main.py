@@ -6,7 +6,7 @@ window.geometry('1280x700+0+0')
 window.resizable(False, False)
 
 # ---------------- BACKGROUND ----------------
-backgroundImage = ImageTk.PhotoImage(file='bg.jpg')
+backgroundImage = ImageTk.PhotoImage(file='bg.png')
 
 bgLabel=Label(window,image=backgroundImage)
 bgLabel.place(x=0,y=0)
