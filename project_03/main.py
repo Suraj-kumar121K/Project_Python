@@ -16,7 +16,7 @@ loginFrame=Frame(window)
 loginFrame.place(x=500, y=150)
 
 # ---------------- LOGO ----------------
-logoImage = PhotoImage(file='logo.png')
+logoImage = PhotoImage(file='logo.jpg')
 logoLabel = Label(loginFrame,image=logoImage)
 logoLabel.grid(row=0, column=0)
 
