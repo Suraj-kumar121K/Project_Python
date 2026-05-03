@@ -22,7 +22,8 @@ logoLabel.grid(row=0, column=0)
 
 # ---------------- USERNAME ----------------
 usernameImage = PhotoImage(file='user.png')
-usernameLabel=Label(loginFrame,image=usernameImage, text='Username', compound=LEFT)
+usernameLabel=Label(loginFrame,image=usernameImage, text='Username', compound=LEFT,
+                    font=('times new roman'20,'bold'))
 usernameLabel.grid(row=1, column=0)
 
 window.mainloop()
