@@ -2,21 +2,65 @@ from tkinter import *
 import time
 import ttkthemes
 from tkinter import ttk,messagebox
-import sqlalchemy
+from sqlalchemy import create_engine, text
 
 #Functionality Part
 
 def connect_database():
     def connect():
         try:
-            con=sqlalchemy.connect(host=hostEntry.get(),user=usernameEntry.get(),password=passwordEntry.get())
-            mycursor=con.cursor()
-            messagebox.showinfo('Success', 'Database Connection is successful')
+            server = hostEntry.get().replace("\\", "\\\\")
+            engine = create_engine(
+                f"mssql+pyodbc://{usernameEntry.get()}:{passwordEntry.get()}@{server}/master?driver=ODBC+Driver+17+for+SQL+Server"
+            )
+            con = engine.connect()
+
+            messagebox.showinfo('Success', 'Connected Successfully', parent=connectWindow)
+
+        except Exception as e:
+            messagebox.showerror('Error', f'Connection Failed\n{e}', parent=connectWindow)
+            return 
+    # Create DB
+        try:
+            con.execute(text("CREATE DATABASE studentmanagementsystem"))
         except:
-           messagebox.showerror('Error', 'Invalid Details')     
+            pass
+    # Connect to DB
+        try:
+            engine2 = create_engine(
+                f"mssql+pyodbc://{usernameEntry.get()}:{passwordEntry.get()}@{server}/studentmanagementsystem?driver=ODBC+Driver+17+for+SQL+Server"
+            )
+            con2 = engine2.connect()
+            # Create table only if not exists
+            con2.execute(text("""
+            IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='student' AND xtype='U')
+            CREATE TABLE student(
+                id INT PRIMARY KEY,
+                name VARCHAR(30),
+                mobile VARCHAR(10),
+                email VARCHAR(30),
+                address VARCHAR(100),
+                gender VARCHAR(20),
+                dob DATE,
+                data VARCHAR(50),
+                time VARCHAR(50)
+            )
+            """))
+        except Exception as e:
+            print("Table Error:", e)
+        messagebox.showinfo('Success', 'Database Ready', parent=connectWindow)
+        # Enable buttons
+        addstudentButton.config(state=NORMAL)
+        searchstudentButton.config(state=NORMAL)
+        deletestudentButton.config(state=NORMAL)
+        updatestudentButton.config(state=NORMAL)
+        showstudentButton.config(state=NORMAL)
+        ExportstudentButton.config(state=NORMAL)
+        ExitstudentButton.config(state=NORMAL)
         
         
     connectWindow=Toplevel()
+    connectWindow.grab_set()
     connectWindow.geometry('440x250+730+230')
     connectWindow.title('Database Connection')
     connectWindow.resizable(0,0)
@@ -113,12 +157,12 @@ showstudentButton=ttk.Button(leftFrame, text='Show Student', width=25, state=DIS
 showstudentButton.grid(row=5, column=0, pady=18)
 
 # ---------------- Export Data ----------------
-showstudentButton=ttk.Button(leftFrame, text='Export data', width=25, state=DISABLED)
-showstudentButton.grid(row=6, column=0, pady=18)
+ExportstudentButton=ttk.Button(leftFrame, text='Export data', width=25, state=DISABLED)
+ExportstudentButton.grid(row=6, column=0, pady=18)
 
 # ---------------- Exit ----------------
-showstudentButton=ttk.Button(leftFrame, text='Exit', width=25)
-showstudentButton.grid(row=7, column=0, pady=18)
+ExitstudentButton=ttk.Button(leftFrame, text='Exit', width=25)
+ExitstudentButton.grid(row=7, column=0, pady=18)
 
 # ---------------- Right Frame ----------------
 rightFrame=Frame(root)
